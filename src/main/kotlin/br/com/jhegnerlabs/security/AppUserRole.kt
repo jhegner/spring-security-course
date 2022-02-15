@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 enum class AppUserRole(
-    val permissions: Set<AppUserPermission>
+    private val permissions: Set<AppUserPermission>
 ) {
     ESTUDANTE(emptySet()),
     ADMIN(

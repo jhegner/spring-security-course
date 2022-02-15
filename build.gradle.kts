@@ -30,10 +30,16 @@ dependencies {
 	// guava
 	implementation("com.google.guava:guava:31.0-jre")
 
+	// jwt
+	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+	runtimeOnly ("io.jsonwebtoken:jjwt-impl:0.11.2")
+//	runtimeOnly ("org.bouncycastle:bcprov-jdk15on:1.60")
+	runtimeOnly ("io.jsonwebtoken:jjwt-jackson:0.11.2")
 
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
 }
 
 tasks.withType<KotlinCompile> {

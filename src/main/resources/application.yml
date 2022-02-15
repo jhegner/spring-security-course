@@ -1,0 +1,5 @@
+app:
+  jwt:
+    secretKey: V?jxag`LK,Ip6~+"W&V0jH4Np'#Y|2d47tt~4pj9)7;6bLM>0_G)dHafHC1nf1Jm+=RcYa&tBOp0)8{mX,))g;CQSl/Heu)n8a
+    tokenPrefix: Bearer
+    tokenExpirationAfterDays: 2
