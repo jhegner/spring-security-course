@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpMethod.*
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -17,6 +18,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 class AppSecurityConfig(
 
     @Autowired
@@ -27,18 +29,19 @@ class AppSecurityConfig(
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
-            .csrf().disable()
+//            .csrf().disable()
             .authorizeRequests()
             .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
             .antMatchers("/api/**").hasRole(ESTUDANTE.name)
-            .antMatchers(DELETE,"/management/api/**").hasAuthority(CURSO_INCLUIR.name)
-            .antMatchers(POST,"/management/api/**").hasAuthority(CURSO_INCLUIR.name)
-            .antMatchers(PUT,"/management/api/**").hasAuthority(CURSO_INCLUIR.name)
-            .antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name, ADMIN_ESTAGIARIO.name)
+//            .antMatchers(DELETE,"/management/api/**").hasAuthority(CURSO_INCLUIR.permission)
+//            .antMatchers(POST,"/management/api/**").hasAuthority(CURSO_INCLUIR.permission)
+//            .antMatchers(PUT,"/management/api/**").hasAuthority(CURSO_INCLUIR.permission)
+//            .antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name, ADMIN_ESTAGIARIO.name)
             .anyRequest()
             .authenticated()
             .and()
-            .httpBasic()
+//            .httpBasic()
+            .formLogin()
     }
 
     @Override
@@ -47,20 +50,23 @@ class AppSecurityConfig(
 
         val userDetails1 = User.builder()
             .username("paulo")
-            .password(passwordEncoder.encode("pwd123"))
-            .roles(ESTUDANTE.name)
+            .password(passwordEncoder.encode("123"))
+//            .roles(ESTUDANTE.name) // ROLE_STUDENT
+            .authorities(ESTUDANTE.getGrantedAuthorities())
             .build()
 
         val userDetails2 = User.builder()
             .username("maria")
-            .password(passwordEncoder.encode("q1w2e3r4"))
-            .roles(ADMIN.name)
+            .password(passwordEncoder.encode("123"))
+//            .roles(ADMIN.name) // ROLE_ADMIN
+            .authorities(ADMIN.getGrantedAuthorities())
             .build()
 
         val userDetails3 = User.builder()
             .username("kim")
             .password(passwordEncoder.encode("123"))
-            .roles(ADMIN_ESTAGIARIO.name)
+//            .roles(ADMIN_ESTAGIARIO.name) // ROLE_ADMIN_ESTAGIARIO
+            .authorities(ADMIN_ESTAGIARIO.getGrantedAuthorities())
             .build()
 
         return InMemoryUserDetailsManager(userDetails1, userDetails2, userDetails3)

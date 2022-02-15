@@ -2,6 +2,7 @@ package br.com.jhegnerlabs.estudante
 
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -24,6 +25,7 @@ class GerenciaEstudanteController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_ESTAGIARIO')")
     fun getTodosEstudantes(): ResponseEntity<Any> {
         val response = object {
             val data = EstudanteController.ESTUDANTES
@@ -32,16 +34,19 @@ class GerenciaEstudanteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('estudante:incluir')")
     fun postNovoEstudante(@RequestBody estudante: Estudante) {
         println("Incluindo um novo estudante $estudante")
     }
 
     @DeleteMapping(path = ["/{estudanteId}"])
-    fun deleteEstudante(estudanteId: Int) {
+    @PreAuthorize("hasAuthority('estudante:incluir')")
+    fun deleteEstudante(@PathVariable estudanteId: Int) {
         println("Removendo o estudante $estudanteId")
     }
 
-    @PutMapping(path = ["estudanteId"])
+    @PutMapping(path = ["/{estudanteId}"])
+    @PreAuthorize("hasAuthority('estudante:incluir')")
     fun putEstudante(@PathVariable estudanteId: Int, @RequestBody estudante: Estudante) {
         println("Atualizando o estudante $estudanteId com as informacoes $estudante")
     }
